@@ -2,6 +2,7 @@ var fs = require("fs")
 var path = require("path")
 var cheerio = require("cheerio")
 
+let webConfigData = {}
 function getDayOfWeek(dayValue){
     var day = new Date(Date.parse(dayValue.replace(/-/g, '/'))); //将日期值格式化
     var today = new Array("星期天","星期一","星期二","星期三","星期四","星期五","星期六");
@@ -22,10 +23,14 @@ function formatDate(date) {
 //读取配置文件
 const getWebConfig = () =>{
     var data = {}
+    if(webConfigData && Object.keys(webConfigData).length > 0){
+        return webConfigData
+    }
     try{
-        data = fs.readFileSync(path.join(__dirname, '../config/webConfig.json'));
+        data = fs.readFileSync(path.resolve(__dirname, '../config/webConfig.json'));
         data = data.toString()
-        data = JSON.parse(data)
+        data = typeof data == 'string' ? JSON.parse(data) : data
+        webConfigData = data
     }catch(e){
         data = {}
         console.log(e.message)
@@ -34,12 +39,14 @@ const getWebConfig = () =>{
 }
 
 //设置配置文件
-const setWebConfig = (webConfig) => {
-    fs.writeFile(path.join(__dirname, '../config/webConfig.json'), JSON.stringify(webConfig),  function(err) {
+const setWebConfig = async (webConfig) => {
+    webConfigData = webConfig
+    await fs.writeFile(path.resolve(__dirname, '../config/webConfig.json'), JSON.stringify(webConfig),  function(err) {
         if (err) {
             return console.error(err);
         }
     });
+    return true
 }
 
 //读取模板
@@ -59,7 +66,7 @@ const getTemplate = (path) =>{
 const getMemory = (fileName) =>{
     var data = {}
     try{
-        data = fs.readFileSync(path.join(__dirname, fileName));
+        data = fs.readFileSync(path.resolve(__dirname, fileName));
         data = data.toString()
         data = JSON.parse(data)
     }catch(e){
@@ -104,8 +111,8 @@ const clearMemoryItem = (fileName) => {
 var pageInit = function(){
     var config = getWebConfig()
     var script = '<script type="application/javascript">'
-    script += 'window.watermark="' + config.watermark + '";'
-    script += 'window.refreshTime="' + config.refreshTime + '";'
+    script += 'window.watermark="' + (config.watermark || '青') + '";'
+    script += 'window.refreshTime="' + (config.refreshTime || 3000) + '";'
     script += '</script>'
     return script
 }

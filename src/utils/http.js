@@ -18,7 +18,8 @@ ajax.request = (option, params, success, error) =>{
         });
         res.on('end',function(){
             let data = Buffer.concat(chunks, size);
-            success && success(data)
+            let html = data.toString();
+            success && success(html)
         });
     })
     res.on('error', (e) => {
