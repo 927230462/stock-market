@@ -9,8 +9,8 @@ const cheerio = require('cheerio');
 var handlebars = require("handlebars")
 
 var typeMapDir = {
-    HISTORY: '../history',
-    RECOVER: '../recover'
+    HISTORY: '../history/',
+    RECOVER: '../recover/'
 }
 
 module.exports = function (app) {
