@@ -9,15 +9,27 @@ function getDayOfWeek(dayValue){
     return today[day.getDay()] //day.getDay();根据Date返一个星期中的某一天，其中0为星期日
 }
 
-function formatDate(date) {
+function formatDateFileName(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
-        year = d.getFullYear();
-
+        year = d.getFullYear(),
+        hours = d.getHours();
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
-    return [year, month, day].join('-');
+
+    var hoursStr = ''
+    if( hours >= 0  && hours < 6 ){
+        hoursStr = '-00-06'
+    }else if( hours >= 6  && hours < 12){
+        hoursStr = '-06-12'
+    }else if( hours >= 12  && hours < 18 ){
+        hoursStr = '-12-18'
+    }else if( hours >= 18  && hours < 24){
+        hoursStr = '-18-24'
+    }
+
+    return [year, month, day].join('-') + hoursStr;
 }
 
 //读取配置文件
@@ -144,7 +156,7 @@ module.exports = {
     clearMemory: clearMemory,
     clearMemoryItem: clearMemoryItem,
     getDayOfWeek: getDayOfWeek,
-    formatDate: formatDate,
+    formatDateFileName: formatDateFileName,
     getIndexPage: getIndexPage,
     getCachePage: getCachePage,
 }

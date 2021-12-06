@@ -22,7 +22,7 @@ module.exports = function (app) {
                     return
                 }
                 //开启备份存储信息
-                var fileName = '../cache/' + util.formatDate(new Date()) + '.txt'
+                var fileName = '../cache/' + util.formatDateFileName(new Date()) + '.txt'
                 var mapList = util.getMemory(fileName)
                 list.forEach(function (v) {
                     if(!mapList[v.id]){
