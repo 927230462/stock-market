@@ -8,26 +8,16 @@ var spiderFormat = require('../spider/format')
 const cheerio = require('cheerio');
 var handlebars = require("handlebars")
 
-var typeMapDir = {
-    HISTORY: '../history/',
-    RECOVER: '../recover/'
-}
+var dir = '../cache/'
+var title =  '备份信息列表'
 
 module.exports = function (app) {
     //挂机消息
     app.get('/cache', function (req, res) {
-        var dir = typeMapDir[req.query.type], title = ''
-        if(req.query.type == 'HISTORY'){
-            title = '挂机消息列表'
-        }else if(req.query.type == 'RECOVER'){
-            title = '备份消息列表'
-        }
-
         var callback = function (arr) {
             var map = {
                 list: arr,
-                title: title,
-                type: req.query.type
+                title: title
             }
             let $ = util.getCachePage();
             var con = handlebars.compile($("#listTemplate").html())(map);
@@ -66,17 +56,13 @@ module.exports = function (app) {
     })
 
     app.get('/clearCache', function (req, res) {
-        var type = req.query.type
-        var dir = typeMapDir[type]
         util.clearMemory(dir)
         res.status(200)
         res.json({success: true})
     })
 
     app.get('/clearCacheItem', function (req, res) {
-        var type = req.query.type
-        var date = req.query.date
-        var dir = typeMapDir[type] + date + '.txt'
+        var dir = '../cache/' + date + '.txt'
         util.clearMemoryItem(dir)
         res.status(200)
         res.json({success: true})
@@ -84,18 +70,13 @@ module.exports = function (app) {
 
     app.get('/getCacheItem', function (req, res) {
         var date = req.query.date
-        var type = req.query.type
-        var fileName = typeMapDir[type] + date + '.txt'
+        var fileName = '../cache/' + date + '.txt'
         var map = util.getMemory(fileName)
         var list = []
         Object.keys(map).forEach(function (v,index) {
             map[v].index = index + 1
             list.push(map[v])
         })
-        var title = '备份信息列表'
-        if(type == "HISTORY"){
-            title = '挂机信息列表'
-        }
         var html = spiderFormat.renderList(list, true, title)
         res.send(html);
     })
