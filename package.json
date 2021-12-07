@@ -35,5 +35,8 @@
     "https": "^1.0.0",
     "pkg": "^4.4.9",
     "querystring": "^0.2.0"
+  },
+  "dependencies": {
+    "mysql": "^2.18.1"
   }
 }

@@ -34,8 +34,8 @@ var listFilter = function (list,isCache) {
 
                 //问题当中有关键词 并且 回答中不包含
                 if((v.question.indexOf(key) >= 0 || v.text.indexOf(key) >= 0) && !flag){
-                    v.question = renderKey(v.question, key)
-                    v.text = renderKey(v.text, key)
+                    // v.question = renderKey(v.question, key)
+                    // v.text = renderKey(v.text, key)
                     if(!isCache){
                         //(没有历史记录 或者 没有历史通知)
                         if((!webConfig[v.type] || webConfig[v.type].indexOf(v.id) < 0)){

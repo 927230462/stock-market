@@ -4,6 +4,18 @@ var util = require('../utils/util');
 var spiderHttp = require('../spider/index')
 var spiderFormat = require('../spider/format')
 
+
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    port: '3306',
+    host: 'localhost',
+    user: 'root',
+    password: '111111',
+    database: 'stock'
+});
+connection.connect();
+
+
 module.exports = function (app) {
     var timer = null
     var startMemory = function(){
@@ -21,15 +33,23 @@ module.exports = function (app) {
                 if(list.length == 0){
                     return
                 }
-                //开启备份存储信息
-                var fileName = '../cache/' + util.formatDateFileName(new Date()) + '.txt'
-                var mapList = util.getMemory(fileName)
+
                 list.forEach(function (v) {
-                    if(!mapList[v.id]){
-                        mapList[v.id] = v
-                    }
+                    v.createTime = util.parseTime(new Date())
+                    connection.query(`SELECT * FROM log where msgId='${v.id}'`, function (error, results, fields) {
+                        if (error) throw error;
+                        console.log('The solution is: ', results[0]);
+                        if(!results[0]){
+                            connection.query(`INSERT INTO log(msgId, msgSource, msgTitle, msgQuestion, msgAnswer,msgTime, createTime) VALUES("${v.id}","${v.type}", '${v.title}', '${v.question}', '${v.text}', '${v.time}','${v.createTime}')`, function (error, results, fields) {
+                                if (error) throw error;
+                                console.log('The solution is: ', results[0]);
+                            });
+                        }
+                    });
+
                 })
-                util.setMemory(mapList, fileName)
+
+
             }
         }
 
