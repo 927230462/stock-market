@@ -5,19 +5,19 @@ var handlebars = require("handlebars")
 
 var listFilter = function (list, ctx) {
   var arr = []
-  var filter = ctx.sesstion.filter
+  var filter = ctx.session.filter
   var filterList = filter.split(" ")
-  var defaultFilterList = ctx.sesstion.defaultFilter.split(" ")
+  var defaultFilterList = ctx.session.defaultFilter.split(" ")
 
   list.forEach(function (v, index) {
-    v.code = v.code ? "(" + v.code + ")" : ""
+    v.stockCode = v.stockCode ? "(" + v.stockCode + ")" : ""
     v.index = index + 1
-    v.question = v.question || ""
-    v.answer = v.answer || ""
+    v.msgQuestion = v.msgQuestion || ""
+    v.msgAnswer = v.msgAnswer || ""
 
     var flag = false
     defaultFilterList.forEach(function (noItem) {
-      if (v.answer.indexOf(noItem) >= 0) {
+      if (v.msgAnswer.indexOf(noItem) >= 0) {
         flag = true //回答中包含不是 没有 无法 还未 不推送
       }
     })
@@ -31,7 +31,7 @@ var listFilter = function (list, ctx) {
     } else {
       filterList.forEach(function (key) {
         //问题当中有关键词 并且 回答中不包含
-        if (v.question.indexOf(key) >= 0 || v.text.indexOf(key) >= 0) {
+        if (v.msgQuestion.indexOf(key) >= 0 || v.msgAnswer.indexOf(key) >= 0) {
           arr.push(v)
         }
       })

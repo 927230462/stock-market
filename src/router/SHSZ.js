@@ -4,31 +4,10 @@ let router = require("./router")
 
 //所有的数据接口
 router.get("/current", async (ctx) => {
-  var map = {
-    shanghai: false,
-    shanghList: [],
-    shenzhen: false,
-    shenzhenList: [],
-  }
-  var all = function () {
-    if (map.shenzhen && map.shanghai) {
-      var html = spiderFormat.renderList(map.shenzhenList.concat(map.shanghList), false, "上证+深交")
-      res.send(html)
-    }
-  }
-  spiderHttp.getShangHaiHtml(function (list) {
-    map.shanghai = true
-    map.shanghList = list
-    all()
-  })
-  spiderHttp.getShenZhenHtml(function (list) {
-    map.shenzhen = true
-    map.shenzhenList = list
-    all()
-  })
-
+  var res = await Promise.all([spiderHttp.getShangHaiHtml(), spiderHttp.getShenZhenHtml()])
+  var arr = spiderFormat.listFilter(res[0].concat(res[1]), ctx)
   ctx.body = {
-    data: [],
+    data: arr,
   }
 })
 
