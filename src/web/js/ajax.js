@@ -27,7 +27,12 @@ var Ajax = function (type, url, ops) {
   if (ops.type == "get") {
     xhr.send()
   } else {
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    if (type == "SUBMIT") {
+      xhr.setRequestHeader("Content-type", "application/json")
+    } else {
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    }
+
     xhr.send(ops.data)
   }
   // 开启监听

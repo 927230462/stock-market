@@ -57,13 +57,6 @@
         var reg = new RegExp(key, "g") //g就是代表全部bai
         return content.replace(reg, '<span style="color: red;font-weight: bold;">' + key + "</span>")
       }
-
-      let timeData = 10000
-      var time = (isNaN(Number(timeData)) ? 60 : timeData) * 1000
-      setTimeout(function(){
-        window.location.reload()
-      },time);
-
     </script>
     <audio id="myAudio" src="/public/dog.mp3"></audio>
     <div id="root"></div>
@@ -101,10 +94,14 @@
           success: function (res) {
             var template = Handlebars.compile($("#listTemplate").html())
             $("#root").append(template(res))
-            notifyFn(res.data)
           },
         })
       }else{
+        let timeData = 10000
+        setTimeout(function(){
+          window.location.reload()
+        },(timeData ? Number(timeData) : 60) * 1000);
+
         window.Http.get({
           url: "/current/all",
           data: { date: date },
