@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <!--UTF-8-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--兼容IE-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!--SEO优化-->
+    <meta keywords="Saas平台" />
+    <meta description="Saas平台." />
+    <meta author="找找找" />
+    <link rel="icon" href="./logo.png" type="image/x-icon" />
+    <!--添加对手机设备的支持-->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Win</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+  </head>
+  <body>
+    <div id="root">
+      <form method="post" action="/submitSetting">
+        <div class="submitItem"><span>默认非： </span><textarea name="defaultFilter" id="defaultFilter"></textarea></div>
+        <div class="submitItem"><span>关键词：</span><textarea name="filter" id="filter" style="height: 130px"></textarea></div>
+        <div class="submitItem"><span>水印值： </span><textarea name="watermark" id="watermark"></textarea></div>
+        <div class="submitItem"><span>刷新时间： </span><input name="refreshTime" id="refreshTime" /> 秒</div>
+        <div class="submitItem"><span>备份时间： </span><input name="coverTime" id="coverTime" /> 秒</div>
+        <div class="submitBtn"><input type="submit" /></div>
+      </form>
+    </div>
+
+    <script type="application/javascript" src="/js/watermark.js"></script>
+    <script type="application/javascript" src="/js/ajax.js"></script>
+  </body>
+</html>

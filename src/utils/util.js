@@ -1,13 +1,3 @@
-var fs = require("fs")
-var path = require("path")
-var cheerio = require("cheerio")
-
-function getDayOfWeek(dayValue) {
-  var day = new Date(Date.parse(dayValue.replace(/-/g, "/"))) //将日期值格式化
-  var today = new Array("星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六")
-  return today[day.getDay()] //day.getDay();根据Date返一个星期中的某一天，其中0为星期日
-}
-
 function parseTime(time, cFormat) {
   if (!time) {
     return null
@@ -74,66 +64,7 @@ function formatDateFileName(date) {
   return [year, month, day].join("-") + hoursStr
 }
 
-//读取模板
-const getTemplate = (path) => {
-  var data = ""
-  try {
-    data = fs.readFileSync(path)
-    data = data.toString()
-  } catch (e) {
-    data = ""
-    console.log("读取模板", e.message)
-  }
-  return data
-}
-
-//读取模板
-const getMemory = (fileName) => {
-  var data = {}
-  try {
-    data = fs.readFileSync(path.resolve(__dirname, fileName))
-    data = data.toString()
-    data = JSON.parse(data)
-  } catch (e) {
-    data = {}
-    console.log("读取挂机内容", e.message)
-  }
-  return data
-}
-
-var pageInit = function () {
-  // var config = getWebConfig()
-  // var script = '<script type="application/javascript">'
-  // script += 'window.watermark="' + (config.watermark || '青') + '";'
-  // script += 'window.refreshTime="' + (config.refreshTime || 3000) + '";'
-  // script += '</script>'
-  return script
-}
-
-var getIndexPage = function () {
-  var template = getTemplate(path.resolve(__dirname, "../index.html"))
-  let $ = cheerio.load(template, { decodeEntities: false })
-  $("body").attr("id", "index-container")
-  var script = pageInit()
-  $("body").prepend(script)
-  return $
-}
-
-var getCachePage = function () {
-  var template = getTemplate(path.resolve(__dirname, "../cache.html"))
-  let $ = cheerio.load(template, { decodeEntities: false })
-  $("body").attr("id", "index-container")
-  var script = pageInit()
-  $("body").prepend(script)
-  return $
-}
-
 module.exports = {
-  getTemplate: getTemplate,
-  getMemory: getMemory,
-  getDayOfWeek: getDayOfWeek,
   formatDateFileName: formatDateFileName,
   parseTime: parseTime,
-  getIndexPage: getIndexPage,
-  getCachePage: getCachePage,
 }

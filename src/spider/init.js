@@ -1,23 +1,10 @@
-var express = require("express")
-var router = express.Router()
 var util = require("../utils/util")
 var spiderHttp = require("./index")
 var spiderFormat = require("./format")
+var connection = require("../mysql/index")
 
-var mysql = require("mysql")
-var connection = mysql.createConnection({
-  port: "3306",
-  host: "localhost",
-  user: "root",
-  password: "111111",
-  database: "stock",
-})
-connection.connect()
-
-module.exports = function (app) {
+module.exports = function () {
   var timer = null
-  var webConfig = {}
-  // var webConfig = util.getWebConfig()
   var save = function (listArr) {
     if (listArr.length == 0) {
       return
@@ -51,8 +38,8 @@ module.exports = function (app) {
       save(list)
     })
   }
-  timerFn() // 立即执行一次
-  timer = setInterval(function () {
-    timerFn()
-  }, webConfig.coverTime * 1000 || 30000)
+  // timerFn() // 立即执行一次
+  // timer = setInterval(function () {
+  //   timerFn()
+  // }, webConfig.coverTime * 1000 || 30000)
 }

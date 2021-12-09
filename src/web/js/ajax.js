@@ -34,7 +34,7 @@ var Ajax = function (type, url, ops) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       // 执行回调函数，取出数据
-      ops.success(xhr.responseText)
+      ops.success(JSON.parse(xhr.responseText))
     }
   }
 }
