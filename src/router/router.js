@@ -3,10 +3,8 @@ const Router = require("koa-router")
 let router = new Router()
 
 //  主页
-router.get("/", function (req, res) {
-  var $ = util.getIndexPage()
-  $("body").append($("#index").html())
-  res.send($.html())
+router.get("/", async (ctx) => {
+  ctx.body = "服务启动成功"
 })
 
 //  POST 请求

@@ -39,7 +39,31 @@
           var notification = new Notification($title, $options)
         }
       }
-      // setTimeout(function(){window.location.reload()},window.refreshTime);
+
+      function notifyFn(arr){
+        //如果不是渲染历史 则不需刷新
+        arr.forEach(function (v, index) {
+          if (v.isNotify) {
+            setTimeout(function(){
+              createNotify(v.title, {body:'有需要您关注的信息'})
+            }, 0)
+            var myVideo=document.getElementById("myAudio");
+            myVideo.addEventListener("canplay",function(){myVideo.play();});
+          }
+        })
+      }
+
+      function renderKey(content, key) {
+        var reg = new RegExp(key, "g") //g就是代表全部bai
+        return content.replace(reg, '<span style="color: red;font-weight: bold;">' + key + "</span>")
+      }
+
+      let timeData = 10000
+      var time = (isNaN(Number(timeData)) ? 60 : timeData) * 1000
+      setTimeout(function(){
+        window.location.reload()
+      },time);
+
     </script>
     <audio id="myAudio" src="/public/dog.mp3"></audio>
     <div id="root"></div>
@@ -77,43 +101,19 @@
           success: function (res) {
             var template = Handlebars.compile($("#listTemplate").html())
             $("#root").append(template(res))
+            notifyFn(res.data)
           },
         })
       }else{
         window.Http.get({
-          url: "/current",
+          url: "/current/all",
           data: { date: date },
           success: function (res) {
             var template = Handlebars.compile($("#listTemplate").html())
             $("#root").append(template(res))
+            notifyFn(res.data)
           },
         }) 
       }
-
-      var renderKey = function (content, key) {
-        var reg = new RegExp(key, "g") //g就是代表全部bai
-        return content.replace(reg, '<span style="color: red;font-weight: bold;">' + key + "</span>")
-      }
     </script>
-<!-- 
-var notification = "<script>"
-  var html = ""
-  if (!isCache) {
-    arr = listFilter(list, isCache)
-    //如果不是渲染历史 则不需刷新
-    arr.forEach(function (v, index) {
-      if (v.isNotify) {
-        // webConfig[v.type] = webConfig[v.type] || []
-        // webConfig[v.type].push(v.id)
-        notification +=
-          "setTimeout(function(){createNotify('" +
-          v.title +
-          "',{body:'有需要您关注的信息'})}, 0);" +
-          'var myVideo=document.getElementById("myAudio");myVideo.addEventListener("canplay",function(){myVideo.play();});'
-      }
-    })
-    notification += "</script>"
-
-    var time = (isNaN(Number(data)) ? 60 : data) * 1000
-    var reload = "<script>setTimeout(function(){window.location.reload()}," + time + ");</script>" -->
 </html>

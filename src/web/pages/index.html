@@ -18,30 +18,6 @@
     <link rel="stylesheet" type="text/css" href="/css/index.css" />
   </head>
   <body>
-    <script type="text/javascript">
-      Notification.requestPermission((res) => {
-        console.log(res)
-      })
-      function createNotify(title, options) {
-        var PERMISSON_GRANTED = "granted"
-        var PERMISSON_DENIED = "denied"
-        var PERMISSON_DEFAULT = "default"
-        if (Notification.permission === PERMISSON_GRANTED) {
-          notify(title, options)
-        } else {
-          Notification.requestPermission(function (res) {
-            if (res === PERMISSON_GRANTED) {
-              notify(title, options)
-            }
-          })
-        }
-        function notify($title, $options) {
-          var notification = new Notification($title, $options)
-        }
-      }
-      // setTimeout(function(){window.location.reload()},window.refreshTime);
-    </script>
-    <audio id="myAudio" src="/public/dog.mp3"></audio>
     <div id="root">
       <div class="entry-list">
         <h2><a target="_blank" href="/pages/list.html">上证+深交</a></h2>
