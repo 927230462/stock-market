@@ -33,7 +33,7 @@ var Ajax = function (type, url, ops) {
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     }
 
-    xhr.send(ops.data)
+    xhr.send(JSON.stringify(ops.data))
   }
   // 开启监听
   xhr.onreadystatechange = function () {

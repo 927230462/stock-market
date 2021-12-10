@@ -44,23 +44,20 @@ router.get("/user/info", async (ctx) => {
 })
 
 router.post("/user/setting", async (ctx) => {
-  console.log(ctx.request)
+  let errMsg
   let { watermark, defaultFilter, filter, refreshTime, coverTime } = ctx.request.body
-  let sql = `UPDATE user 
-  SET defaultFilter = '${defaultFilter}', filter = '${filter}', 
-  watermark = '${watermark}',  refreshTime = '${refreshTime}',  coverTime = '${coverTime}'  
+  let sql = `UPDATE user SET defaultFilter = '${defaultFilter}', filter = '${filter}', watermark = '${watermark}',  refreshTime = '${refreshTime || 0}',  coverTime = '${coverTime}' 
   WHERE id='${ctx.session.id}'`
-
-  console.log(sql)
-
-  // let user = await new Promise((resolve, reject) => {
-  //   connection.query(sql, function (error, results, fields) {
-  //     console.log(results)
-  //     resolve(results)
-  //   })
-  // })
+  let user = await new Promise((resolve, reject) => {
+    connection.query(sql, function (error, results, fields) {
+      if (error) {
+        errMsg = error
+      }
+      resolve(results)
+    })
+  })
   ctx.type = "json"
   ctx.body = {
-    msg: "设置成功",
+    msg: errMsg ? errMsg.sqlMessage : "设置成功",
   }
 })

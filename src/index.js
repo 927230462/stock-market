@@ -1,10 +1,16 @@
-console.log("你好！欢迎使用废废的小工具~")
 var path = require("path")
 var Koa = require("koa")
 var app = new Koa()
+
+// 解析body
+var bodyParser = require("koa-bodyparser")
+app.use(bodyParser())
+
+// 静态资源文件
 var serve = require("koa-static")
 app.use(serve(path.join(__dirname, "./web")))
 
+// session
 const session = require("koa-session")
 app.keys = ["some secret hurr"]
 const CONFIG = {
@@ -18,15 +24,20 @@ const CONFIG = {
 }
 app.use(session(CONFIG, app))
 
-//添加路由
+// 添加路由
 let router = require("./router/index")
 app.use(router.routes())
 
-var spiderInit = require("./spider/init") //外挂
+// 外挂
+var spiderInit = require("./spider/init")
 spiderInit()
 
+//启动服务
 var server = app.listen(8082, function () {
   var host = server.address().address
   var port = server.address().port
   console.log("应用实例，访问地址为 http://%s:%s", host, port)
 })
+
+//
+console.log("你好！欢迎使用废废的小工具~")
