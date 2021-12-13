@@ -2,12 +2,12 @@ var util = require("../utils/util")
 var connection = require("../mysql/index")
 let router = require("./router")
 
-router.get("/user/login", async (ctx) => {
-  let { mobile, password } = ctx.request.query
+router.post("/user/login", async (ctx) => {
+  let { userName, password } = ctx.request.body
   let result, errMsg
-  console.log(mobile)
+  console.log(userName)
   let user = await new Promise((resolve, reject) => {
-    connection.query(`SELECT * FROM user where mobile='${mobile}'`, function (error, results, fields) {
+    connection.query(`SELECT * FROM user where mobile='${userName}'`, function (error, results, fields) {
       console.log(results)
       resolve(results[0])
     })
