@@ -38,6 +38,16 @@ var Ajax = function (type, url, ops) {
   // 开启监听
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
+      if (xhr.responseText) {
+        try {
+          let res = JSON.parse(xhr.responseText)
+          if (res.code == "0006") {
+            window.location.href = "/pages/login.html"
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      }
       // 执行回调函数，取出数据
       ops.success(JSON.parse(xhr.responseText))
     }

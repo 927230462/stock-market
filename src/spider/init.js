@@ -38,8 +38,8 @@ module.exports = function () {
       save(list)
     })
   }
-  // timerFn() // 立即执行一次
-  // timer = setInterval(function () {
-  //   timerFn()
-  // }, webConfig.coverTime * 1000 || 30000)
+  timerFn() // 立即执行一次
+  timer = setInterval(function () {
+    timerFn()
+  }, webConfig.coverTime * 1000 || 30000)
 }

@@ -23,12 +23,19 @@ router.post("/user/login", async (ctx) => {
     ctx.session.watermark = user.watermark
     // let app = ctx.app
     // app.counter.users[user.userName] = true
+
+    // 外挂
+    var spiderInit = require("./spider/init")
+    spiderInit()
   } else {
     errMsg = "账号或密码错误"
   }
 
   console.log("tongbu")
-  ctx.body = errMsg || user.email
+  ctx.body = {
+    code: "0001",
+    content: errMsg || user.email,
+  }
 })
 
 router.get("/user/info", async (ctx) => {

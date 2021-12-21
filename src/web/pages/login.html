@@ -23,7 +23,7 @@
       <div class="login">
         <div class="submitItem">
           <span>用户名： </span>
-          <input type="text" name="userName" id="userName" />
+          <input type="text" name="userName" id="userName" value="17621157638" />
         </div>
         <div class="submitItem">
           <span>密码：</span>
@@ -49,19 +49,10 @@
           type: "post",
           dataType: "json",
           success: function (res) {
-            alert(res.msg)
+            window.location.href = "/pages/index.html"
           },
         })
       }
-
-      window.Http.get({
-        url: "/user/info",
-        success: function (res) {
-          if (res && res.id) {
-            window.location.href = "/pages/index.html"
-          }
-        },
-      })
     </script>
   </body>
 </html>

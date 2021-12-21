@@ -24,13 +24,21 @@ const CONFIG = {
 }
 app.use(session(CONFIG, app))
 
+app.use(async (ctx, next) => {
+  if (!ctx.session.id && ctx.path != "/user/login") {
+    ctx.type = "json" // 指定返回类型为 html 类型
+    ctx.body = {
+      code: "0006",
+      msg: "请先登录",
+    }
+  } else {
+    await next()
+  }
+})
+
 // 添加路由
 let router = require("./router/index")
 app.use(router.routes())
-
-// 外挂
-var spiderInit = require("./spider/init")
-spiderInit()
 
 //启动服务
 var server = app.listen(8082, function () {
