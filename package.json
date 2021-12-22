@@ -1,13 +1,14 @@
 {
   "main": "main.js",
-  "name": "HelloWorld",
+  "name": "stock-market",
+  "version": "2.0.0",
   "nodejs": true,
   "single-instance": true,
   "scripts": {
     "start": "node ./src/index.js"
   },
   "window": {
-    "title": "HelloWorld",
+    "title": "stock-market",
     "width": 800,
     "height": 600,
     "icon": "logo.png",
