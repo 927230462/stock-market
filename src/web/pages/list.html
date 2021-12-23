@@ -1,0 +1,116 @@
+<html>
+  <head>
+    <!--UTF-8-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--兼容IE-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!--SEO优化-->
+    <meta keywords="Saas平台" />
+    <meta description="Saas平台." />
+    <meta author="找找找" />
+    <link rel="icon" href="./logo.png" type="image/x-icon" />
+    <!--添加对手机设备的支持-->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Win</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+  </head>
+  <body>
+    <script type="text/javascript">
+      Notification.requestPermission((res) => {
+        console.log(res)
+      })
+      function createNotify(title, options) {
+        var PERMISSON_GRANTED = "granted"
+        var PERMISSON_DENIED = "denied"
+        var PERMISSON_DEFAULT = "default"
+        if (Notification.permission === PERMISSON_GRANTED) {
+          notify(title, options)
+        } else {
+          Notification.requestPermission(function (res) {
+            if (res === PERMISSON_GRANTED) {
+              notify(title, options)
+            }
+          })
+        }
+        function notify($title, $options) {
+          var notification = new Notification($title, $options)
+        }
+      }
+
+      function notifyFn(arr){
+        //如果不是渲染历史 则不需刷新
+        arr.forEach(function (v, index) {
+          if (v.isNotify) {
+            setTimeout(function(){
+              createNotify(v.title, {body:'有需要您关注的信息'})
+            }, 0)
+            var myVideo=document.getElementById("myAudio");
+            myVideo.addEventListener("canplay",function(){myVideo.play();});
+          }
+        })
+      }
+
+      function renderKey(content, key) {
+        var reg = new RegExp(key, "g") //g就是代表全部bai
+        return content.replace(reg, '<span style="color: red;font-weight: bold;">' + key + "</span>")
+      }
+    </script>
+    <audio id="myAudio" src="/public/dog.mp3"></audio>
+    <div id="root"></div>
+    
+    <script type="text/html" id="listTemplate">
+      <div>
+          <h2>{{title}}</h2>
+          {{#if data.length}}
+          <div class="show-list">
+              {{#each data}}
+              <div style="border-bottom: 1px dashed #999;">
+                  <h1>{{@index}}、{{msgTitle}}{{stockCode}}</h1>
+                  <p><h2 style="float:left;margin:0;">问：</h2><p style="line-height: 35px;font-size: 18px;">{{{msgQuestion}}}</p></p>
+                  <p><h2 style="float:left;margin:0;">答：</h2><p style="line-height: 35px;font-size: 18px;">{{{msgAnswer}}}</p></p>
+                  <p style="color: #1818fd;">{{{msgTime}}}</p>
+              </div>
+              {{/each}}
+          </div>
+          {{else}}
+          <div>暂无关键字匹配的数据。</div>
+          {{/if}}
+      </div>
+    </script>
+  
+    <script type="application/javascript" src="/js/watermark.js"></script>
+    <script type="application/javascript" src="/js/handlebars.js"></script>
+    <script type="application/javascript" src="/js/ajax.js"></script>
+    <script type="application/javascript" src="/js/jquery.js"></script>
+    <script type="application/javascript">
+      var date = ""
+      if (date) {
+        window.Http.get({
+          url: "/cache/item",
+          data: { date: date },
+          success: function (res) {
+            var template = Handlebars.compile($("#listTemplate").html())
+            $("#root").append(template(res))
+          },
+        })
+      }else{
+        let timeData = 10000
+        setTimeout(function(){
+          window.location.reload()
+        },(timeData ? Number(timeData) : 60) * 1000);
+
+        window.Http.get({
+          url: "/current/all",
+          data: { date: date },
+          success: function (res) {
+            var template = Handlebars.compile($("#listTemplate").html())
+            $("#root").append(template(res))
+            notifyFn(res.data)
+          },
+        }) 
+      }
+    </script>
+</html>

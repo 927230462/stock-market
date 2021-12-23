@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <!--UTF-8-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--兼容IE-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!--SEO优化-->
+    <meta keywords="Saas平台" />
+    <meta description="Saas平台." />
+    <meta author="找找找" />
+    <link rel="icon" href="./logo.png" type="image/x-icon" />
+    <!--添加对手机设备的支持-->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Win</title>
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/index.css" />
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+  </head>
+  <body>
+    <div id="root">
+      <div class="login">
+        <div class="submitItem">
+          <span>用户名： </span>
+          <input type="text" name="userName" id="userName" value="17621157638" />
+        </div>
+        <div class="submitItem">
+          <span>密码：</span>
+          <input type="text" name="password" id="password" />
+        </div>
+        <div class="submitBtn"><button onclick="loginFn()">登录</button></div>
+      </div>
+    </div>
+
+    <script type="application/javascript" src="/js/watermark.js"></script>
+    <script type="application/javascript" src="/js/ajax.js"></script>
+    <script type="application/javascript" src="/js/jquery.js"></script>
+
+    <script type="application/javascript">
+      function loginFn() {
+        let data = {
+          userName: $("#userName").val(),
+          password: $("#password").val(),
+        }
+        window.Http.post({
+          url: "/user/login",
+          data: data,
+          type: "post",
+          dataType: "json",
+          success: function (res) {
+            window.location.href = "/pages/index.html"
+          },
+        })
+      }
+    </script>
+  </body>
+</html>

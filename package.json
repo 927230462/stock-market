@@ -1,13 +1,14 @@
 {
   "main": "main.js",
-  "name": "HelloWorld",
+  "name": "stock-market",
+  "version": "2.0.0",
   "nodejs": true,
   "single-instance": true,
   "scripts": {
     "start": "node ./src/index.js"
   },
   "window": {
-    "title": "HelloWorld",
+    "title": "stock-market",
     "width": 800,
     "height": 600,
     "icon": "logo.png",
@@ -35,5 +36,14 @@
     "https": "^1.0.0",
     "pkg": "^4.4.9",
     "querystring": "^0.2.0"
+  },
+  "dependencies": {
+    "express-http-context": "^1.2.4",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.1.1",
+    "koa-session": "^6.2.0",
+    "koa-static": "^5.0.0",
+    "mysql": "^2.18.1"
   }
 }

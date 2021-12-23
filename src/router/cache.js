@@ -1,83 +1,43 @@
-var express = require("express");
-var path = require("path");
-var fs = require("fs");
-var router = express.Router();
-var util = require('../utils/util');
-var spiderHttp = require('../spider/index')
-var spiderFormat = require('../spider/format')
-const cheerio = require('cheerio');
-var handlebars = require("handlebars")
+let router = require("./router")
+var connection = require("../mysql/index")
 
-var dir = '../cache/'
-var title =  '备份信息列表'
-
-module.exports = function (app) {
-    //挂机消息
-    app.get('/cache', function (req, res) {
-        var callback = function (arr) {
-            var map = {
-                list: arr,
-                title: title
-            }
-            let $ = util.getCachePage();
-            var con = handlebars.compile($("#listTemplate").html())(map);
-            $('body').attr('id', 'index-container')
-            $('#root').append(con)
-            res.send($.html());
-        }
-
-        var stat = {}
-        try {
-            stat = fs.statSync(path.join(__dirname, dir));
-        } catch (err) {
-
-        }
-
-        if (stat.isDirectory && stat.isDirectory()) {
-            fs.readdir(path.join(__dirname, dir), function (err, files) {
-                var arr = []
-                files.forEach(function (v) {
-                    var date = v.split('.txt')[0]
-                    arr.push({
-                        fileName: date,
-                        weekDay: util.getDayOfWeek(date)
-                    })
-                })
-                callback(arr)
-            })
-        } else {
-            fs.mkdir(path.join(__dirname, dir), (err) => {
-                if (err) {
-                    throw err
-                }
-            })
-            callback([])
-        }
+//挂机消息
+router.get("/cache/list", async (ctx) => {
+  let dateList = await new Promise((resolve, reject) => {
+    connection.query(`SELECT DISTINCT DATE_FORMAT(createTime,"%Y-%m-%d") AS 'createTime' FROM log where userId ='${ctx.session.id}'`, function (error, results, fields) {
+      console.log(results)
+      resolve(results)
     })
+  })
+  ctx.type = "json"
+  ctx.body = {
+    data: dateList,
+  }
+})
 
-    app.get('/clearCache', function (req, res) {
-        util.clearMemory(dir)
-        res.status(200)
-        res.json({success: true})
-    })
+router.get("/clearCache", async (ctx) => {
+  ctx.body = "删除缓存文件~~~"
+})
 
-    app.get('/clearCacheItem', function (req, res) {
-        var dir = '../cache/' + date + '.txt'
-        util.clearMemoryItem(dir)
-        res.status(200)
-        res.json({success: true})
-    })
+router.get("/clearCacheItem", async (req, res) => {
+  ctx.body = "删除缓存文件~~~"
+})
 
-    app.get('/getCacheItem', function (req, res) {
-        var date = req.query.date
-        var fileName = '../cache/' + date + '.txt'
-        var map = util.getMemory(fileName)
-        var list = []
-        Object.keys(map).forEach(function (v,index) {
-            map[v].index = index + 1
-            list.push(map[v])
-        })
-        var html = spiderFormat.renderList(list, true, title)
-        res.send(html);
+router.get("/cache/item", async (ctx) => {
+  var { date } = ctx.request.query
+
+  let sql = `SELECT * FROM log WHERE userId ='${ctx.session.id}' AND createTime > '${date} 00:00:00' AND createTime < '${date} 23:59:59'`
+
+  console.log(sql)
+
+  let dateList = await new Promise((resolve, reject) => {
+    connection.query(sql, function (error, results, fields) {
+      console.log(results)
+      resolve(results)
     })
-}
+  })
+  ctx.type = "json"
+  ctx.body = {
+    data: dateList,
+  }
+})

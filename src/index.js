@@ -1,47 +1,51 @@
-console.log('你好！欢迎使用废废的小工具~');
-const cheerio = require('cheerio');
-var util = require('./utils/util');
 var path = require("path")
+var Koa = require("koa")
+var app = new Koa()
 
-var express = require('express');
-var app = express();
-app.use(express.static(path.join(__dirname, './public')));
-app.use(express.static(path.join(__dirname, './css')));
-app.use(express.static(path.join(__dirname, './js')));
+// 解析body
+var bodyParser = require("koa-bodyparser")
+app.use(bodyParser())
 
-var SHSZ = require('./router/SHSZ')(app) //上证深交
-var historyMessage = require('./router/cache')(app) //挂机的历史消息操作
-var keySetting = require('./router/settingKey')(app) //关键词设置
-var timeSetting = require('./router/settingTime')(app) //时间设置
-var hoop = require('./router/hoop')(app) //外挂
+// 静态资源文件
+var serve = require("koa-static")
+app.use(serve(path.join(__dirname, "./web")))
 
-var config = util.getWebConfig()
-config.isSettingMessage = 'no'
-util.setWebConfig(config)
+// session
+const session = require("koa-session")
+app.keys = ["some secret hurr"]
+const CONFIG = {
+  key: "koa:sess", //cookie key (default is koa:sess)
+  maxAge: 86400000, // cookie的过期时间 maxAge in ms (default is 1 days)
+  overwrite: true, //是否可以overwrite    (默认default true)
+  httpOnly: true, //cookie是否只有服务器端可以访问 httpOnly or not (default true)
+  signed: true, //签名默认true
+  rolling: false, //在每次请求时强行设置cookie，这将重置cookie过期时间（默认：false）
+  renew: false, //(boolean) renew session when session is nearly expired,
+}
+app.use(session(CONFIG, app))
 
-
-//  主页
-app.get('/', function (req, res) {
-    var $ = util.getIndexPage()
-    $('body').append($('#index').html())
-    res.send($.html());
+app.use(async (ctx, next) => {
+  if (!ctx.session.id && ctx.path != "/user/login") {
+    ctx.type = "json" // 指定返回类型为 html 类型
+    ctx.body = {
+      code: "0006",
+      msg: "请先登录",
+    }
+  } else {
+    await next()
+  }
 })
 
-//  POST 请求
-app.post('/', function (req, res) {
-    res.send('Hello POST');
-})
+// 添加路由
+let router = require("./router/index")
+app.use(router.routes())
 
-app.get('/list_user', function (req, res) {
-    res.send('用户列表页面');
-})
-
-app.get('/ab*cd', function(req, res) {
-    res.send('正则匹配');
-})
-
+//启动服务
 var server = app.listen(8082, function () {
-    var host = server.address().address
-    var port = server.address().port
-    console.log("应用实例，访问地址为 http://%s:%s", host, port)
+  var host = server.address().address
+  var port = server.address().port
+  console.log("应用实例，访问地址为 http://%s:%s", host, port)
 })
+
+//
+console.log("你好！欢迎使用废废的小工具~")
