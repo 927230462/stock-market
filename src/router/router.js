@@ -1,4 +1,3 @@
-var util = require("../utils/util")
 const Router = require("koa-router")
 let router = new Router()
 

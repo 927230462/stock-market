@@ -1,6 +1,4 @@
-const https = require("https")
 const http = require("http")
-const request = require("request")
 var querystring = require("querystring")
 
 let ajax = {}

@@ -1,11 +1,4 @@
-var path = require("path")
-var fs = require("fs")
 let router = require("./router")
-var util = require("../utils/util")
-
-var spiderFormat = require("../spider/format")
-const cheerio = require("cheerio")
-var handlebars = require("handlebars")
 var connection = require("../mysql/index")
 
 //挂机消息

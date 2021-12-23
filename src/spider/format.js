@@ -1,8 +1,3 @@
-const cheerio = require("cheerio")
-var util = require("../utils/util")
-var path = require("path")
-var handlebars = require("handlebars")
-
 var listFilter = function (list, ctx) {
   var arr = []
   var filter = ctx.session.filter

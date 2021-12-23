@@ -1,4 +1,3 @@
-var util = require("../utils/util")
 var connection = require("../mysql/index")
 let router = require("./router")
 
