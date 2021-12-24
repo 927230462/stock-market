@@ -25,17 +25,17 @@ router.get("/clearCacheItem", async (req, res) => {
 
 router.get("/cache/item", async (ctx) => {
   var { date } = ctx.request.query
-
   let sql = `SELECT * FROM log WHERE userId ='${ctx.session.id}' AND createTime > '${date} 00:00:00' AND createTime < '${date} 23:59:59'`
-
-  console.log(sql)
-
   let dateList = await new Promise((resolve, reject) => {
     connection.query(sql, function (error, results, fields) {
-      console.log(results)
-      resolve(results)
+      if (error) {
+        reject(error)
+      } else {
+        resolve(results)
+      }
     })
   })
+  console.log(dateList)
   ctx.type = "json"
   ctx.body = {
     data: dateList,

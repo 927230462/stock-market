@@ -4,11 +4,15 @@ let router = require("./router")
 router.post("/user/login", async (ctx) => {
   let { userName, password } = ctx.request.body
   let result, errMsg
-  console.log(userName)
+
   let user = await new Promise((resolve, reject) => {
     connection.query(`SELECT * FROM user where mobile='${userName}'`, function (error, results, fields) {
-      console.log(results)
-      resolve(results[0])
+      if (error) {
+        errMsg = error
+        reject(error)
+      } else {
+        resolve(results[0])
+      }
     })
   })
 
@@ -24,13 +28,12 @@ router.post("/user/login", async (ctx) => {
     // app.counter.users[user.userName] = true
 
     // 外挂
-    var spiderInit = require("./spider/init")
-    spiderInit()
+    var spiderInit = require("../spider/init")
+    spiderInit(ctx)
   } else {
-    errMsg = "账号或密码错误"
+    errMsg = errMsg || "账号或密码错误"
   }
 
-  console.log("tongbu")
   ctx.body = {
     code: "0001",
     content: errMsg || user.email,

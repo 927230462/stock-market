@@ -20,11 +20,14 @@ var getShangHaiHtml = function () {
         let $ = cheerio.load(html, { decodeEntities: false })
         var list = []
         $(".m_feed_item").each(function (index, v) {
-          let title = $(v).find(".m_qa_detail .m_feed_txt a").html()
+          let titleHtml = $(v).find(".m_qa_detail .m_feed_txt a").html()
+          let title = titleHtml.split("(")[0]
+          let stockCode = titleHtml.split("(")[1]
           let question = $(v).find(".m_feed_detail.m_qa_detail .m_feed_txt")
           question.find("a").remove()
           list.push({
             msgTitle: title,
+            stockCode: stockCode,
             msgAnswer: $(v).find(".m_feed_detail.m_qa .m_feed_txt").html().trim(),
             msgQuestion: question.html().trim(),
             msgId: $(v).find(".m_qa .m_feed_txt").attr("id").split("-")[1],
