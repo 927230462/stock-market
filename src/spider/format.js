@@ -5,7 +5,7 @@ var listFilter = function (list, ctx) {
   var defaultFilterList = ctx.session.defaultFilter.split(" ")
 
   list.forEach(function (v, index) {
-    v.stockCode = v.stockCode ? "(" + v.stockCode + ")" : ""
+    v.stockCode = v.stockCode ? v.stockCode.replace("(", "").replace(")", "") : ""
     v.index = index + 1
     v.msgQuestion = v.msgQuestion || ""
     v.msgAnswer = v.msgAnswer || ""
